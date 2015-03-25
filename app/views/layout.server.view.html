@@ -53,6 +53,12 @@
 		</section>
 	</section>
 
+	<section class="player">
+		<section class="container" data-ng-include="'/modules/player/views/player.client.view.html'" class="">
+
+		</section>
+	</section>
+
 	<!--Embedding The User Object-->
 	<script type="text/javascript">
 		var user = {{ user | json | safe }};
