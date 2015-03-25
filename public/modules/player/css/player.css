@@ -1,0 +1,29 @@
+
+.media-url {
+	width: 600px;
+	color: black;
+}
+
+.full-row {
+	margin: 0 0;
+}
+
+.bottom-float {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	height: 100px;
+	width: 100%;
+	padding: 5px 8%;
+	margin: 5px 0;
+	color: white;
+	background-color: rgba(0,0,0,0.8);
+}
+
+.float-right {
+	float: right;
+}
+
+.current-time {
+	color: white;
+}

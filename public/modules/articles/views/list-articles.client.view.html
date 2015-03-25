@@ -4,12 +4,16 @@
 	</div>
 	<div class="list-group">
 		<a data-ng-repeat="article in articles" data-ng-href="#!/articles/{{article._id}}" class="list-group-item">
-			<small class="list-group-item-text">
+			<!--<small class="list-group-item-text">
 				Posted on
 				<span data-ng-bind="article.created | date:'mediumDate'"></span>
 				by
 				<span data-ng-bind="article.user.displayName"></span>
-			</small>
+			</small>-->
+			<button class="btn btn-primary float-right" data-ng-click="playIt(article);"
+					data-ng-show="authentication.user._id == article.user._id">
+				<i class="glyphicon glyphicon-headphones"></i>
+			</button>
 			<h4 class="list-group-item-heading" data-ng-bind="article.title"></h4>
 			<p class="list-group-item-text" data-ng-bind="article.content"></p>
 		</a>

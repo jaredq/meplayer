@@ -1,8 +1,9 @@
 'use strict';
 
 // Articles controller
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$rootScope', '$stateParams',
+	'$location', 'Authentication', 'Articles',
+	function($scope, $rootScope, $stateParams, $location, Authentication, Articles) {
 		$scope.authentication = Authentication;
 
 		// Create new Article
@@ -27,6 +28,10 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 
 		// Remove existing Article
 		$scope.remove = function(article) {
+			if (!confirm('Remove it?'))
+			{
+				return;
+			}
 			if (article) {
 				article.$remove();
 
@@ -63,6 +68,10 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			$scope.article = Articles.get({
 				articleId: $stateParams.articleId
 			});
+		};
+
+		$scope.playIt = function(article) {
+			$rootScope.$broadcast('playit', article.content);
 		};
 	}
 ]);

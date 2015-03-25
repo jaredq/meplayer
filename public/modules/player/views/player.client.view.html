@@ -1,0 +1,23 @@
+<section data-ng-controller="PlayerController">
+	<div class='row full-row bottom-float'>
+
+		<input type="radio" ng-model="mePlayerType" name="mePlayerType" value="auto" id="player-auto"><label for="player-auto">Auto</label>
+		<input type="radio" ng-model="mePlayerType" name="mePlayerType" value="flash" id="player-flash"><label for="player-flash">Flash</label>
+		<input type="radio" ng-model="mePlayerType" name="mePlayerType" value="html5" id="player-html5"><label for="player-html5">HTML5</label>
+		<input type="radio" ng-model="mePlayerType" name="mePlayerType" value="silverlight" id="player-silverlight"><label for="player-silverlight">Silverlight</label>
+		<span id="me-player-status" class="current-time"></span>
+		<br/>
+
+		<input data-ng-model="mediaUrl" type="text" class="media-url" />
+		<input class="btn btn-default" data-ng-click="startPlay();" value="Start">
+		<input class="btn btn-default" data-ng-click="stopPlay();" value="Stop">
+
+
+		<section me-flash-player></section>
+
+		<section me-html5-player></section>
+
+		<section me-silverlight-player></section>
+
+	</div>
+</section>

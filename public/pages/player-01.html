@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>Demo of VLC mozilla plugin</title>
+	<script src="lib/jquery/dist/jquery.min.js"></script>
+	<script src="lib/jplayer/jquery.jplayer.min.js"></script>
+</head>
+<body>
+
+<h1>Demo of VLC mozilla plugin - Example 1</h1>
+
+<embed type="application/x-vlc-plugin"
+	   name="video1" id="vlc"
+	   autoplay="no" loop="yes" width="400" height="30"
+	   target="" />
+<br />
+
+<input name="mediaurl" id="mediaurl" type="text" value="http://energyradio.de/berlin" />
+<a href="javascript:;" onclick='document.getElementById("vlc").playlist.clear();document.getElementById("vlc").playlist.add(document.getElementById("mediaurl").value);document.getElementById("vlc").playlist.play()'>Start</a>
+
+</body>
+</html>
