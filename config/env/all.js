@@ -2,17 +2,17 @@
 
 module.exports = {
 	app: {
-		title: 'MEAN.JS',
-		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
-		keywords: 'mongodb, express, angularjs, node.js, mongoose, passport'
+		title: 'SoundPlayer',
+		description: '',
+		keywords: ''
 	},
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
 	// The secret should be set to a non-guessable string that
 	// is used to compute a session hash
-	sessionSecret: 'MEAN',
+	sessionSecret: 'SoundPlayer',
 	// The name of the MongoDB collection to store sessions in
-	sessionCollection: 'sessions',
+	sessionCollection: 'sp-sessions',
 	// The session cookie settings
 	sessionCookie: {
 		path: '/',
@@ -56,7 +56,7 @@ module.exports = {
 				'public/lib/jquery/dist/jquery.js',
                 //'public/lib/jplayer/jquery.jplayer.js',
 				'public/lib/mediaelement/dist/mediaelement-and-player.js'
-				
+
 			]
 		},
 		css: [
