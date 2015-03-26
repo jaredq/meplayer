@@ -1,4 +1,5 @@
 'use strict';
+/*global MediaElement*/
 
 angular.module('player').controller('PlayerController', ['$scope', 'Authentication', 'Menus',
 	function($scope, Authentication, Menus) {
@@ -16,7 +17,8 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 		};
 
 		$scope.mePlay = function() {
-			$scope.mePlayer.pause();
+			$scope.meStop();
+
 			$scope.mePlayer.setSrc($scope.mediaUrl);
 			$scope.mePlayer.load();
 			$scope.mePlayer.play();
@@ -25,6 +27,12 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 		$scope.meStop = function() {
 			$scope.mePlayer.pause();
 			$scope.mePlayer.stop();
+			$scope.meFlashPlayer.pause();
+			$scope.meFlashPlayer.stop();
+			$scope.meHtml5Player.pause();
+			$scope.meHtml5Player.stop();
+			$scope.meSilverlightPlayer.pause();
+			$scope.meSilverlightPlayer.stop();
 		};
 
 		$scope.startPlay = function() {
