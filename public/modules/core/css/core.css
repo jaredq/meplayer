@@ -1,5 +1,6 @@
 .content {
 	margin-top: 50px;
+	padding-bottom: 100px;
 }
 .undecorated-link:hover {
 	text-decoration: none;
@@ -17,7 +18,4 @@
 body.ng-cloak
 {
 	display: block;
-}
-.content {
-	margin-bottom: 100px;
 }
