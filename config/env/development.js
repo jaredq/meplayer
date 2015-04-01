@@ -2,16 +2,10 @@
 
 module.exports = {
 	db: {
-		//uri: 'mongodb://localhost/mean-dev',
-		//options: {
-		//	user: '',
-		//	pass: ''
-		//}
-
-		uri: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://ds041177.mongolab.com:41177/appforce',
+		uri: 'mongodb://localhost/player-dev',
 		options: {
-			user: 'appforce2015',
-			pass: 'AppForce2015'
+			user: '',
+			pass: ''
 		}
 	},
 	log: {
