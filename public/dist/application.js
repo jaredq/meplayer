@@ -534,7 +534,7 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 				// specify to force MediaElement to use a particular video or audio type
 				type: '',
 				// path to Flash and Silverlight plugins
-				pluginPath: '/lib/mediaelement/dist/',
+				pluginPath: '/lib/mediaelement/build/',
 				// name of flash file
 				flashName: 'flashmediaelement.swf',
 				// name of silverlight file
@@ -580,7 +580,7 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 				// specify to force MediaElement to use a particular video or audio type
 				type: '',
 				// path to Flash and Silverlight plugins
-				pluginPath: '/lib/mediaelement/dist/',
+				pluginPath: '/lib/mediaelement/build/',
 				// name of flash file
 				flashName: 'flashmediaelement.swf',
 				// name of silverlight file
@@ -626,7 +626,7 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 				// specify to force MediaElement to use a particular video or audio type
 				type: '',
 				// path to Flash and Silverlight plugins
-				pluginPath: '/lib/mediaelement/dist/',
+				pluginPath: '/lib/mediaelement/build/',
 				// name of flash file
 				flashName: 'flashmediaelement.swf',
 				// name of silverlight file
