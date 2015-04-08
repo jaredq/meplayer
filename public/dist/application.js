@@ -462,7 +462,20 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 		$scope.updateStatus = function(msg) {
 			document.getElementById('me-player-status').innerHTML = msg;
 		};
-
+		
+		$scope.choosePlayer = function() {
+			if ($scope.mePlayerType === 'flash') {
+				$scope.updateStatus('==>flash loading ' + $scope.mediaUrl);
+				$scope.mePlayer = $scope.meFlashPlayer;
+			} else if ($scope.mePlayerType === 'silverlight') {
+				$scope.updateStatus('==>silverlight loading ' + $scope.mediaUrl);
+				$scope.mePlayer = $scope.meSilverlightPlayer;
+			} else {
+				$scope.updateStatus('==>html5 loading ' + $scope.mediaUrl);
+				$scope.mePlayer = $scope.meHtml5Player;
+			}
+		}
+		
 		$scope.mePlay = function() {
 			$scope.meStop();
 
@@ -472,36 +485,40 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 		};
 
 		$scope.meStop = function() {
-			$scope.mePlayer.pause();
-			$scope.mePlayer.stop();
-			$scope.meFlashPlayer.pause();
-			$scope.meFlashPlayer.stop();
-			$scope.meHtml5Player.pause();
-			$scope.meHtml5Player.stop();
-			$scope.meSilverlightPlayer.pause();
-			$scope.meSilverlightPlayer.stop();
+			if ($scope.mePlayer) {
+				$scope.mePlayer.pause();
+				$scope.mePlayer.stop();
+			}
+			if ($scope.meFlashPlayer) {
+				$scope.meFlashPlayer.pause();
+				$scope.meFlashPlayer.stop();
+			}
+			if ($scope.meHtml5Player) {
+				$scope.meHtml5Player.pause();
+				$scope.meHtml5Player.stop();
+			}
+			if ($scope.meSilverlightPlayer) {
+				$scope.meSilverlightPlayer.pause();
+				$scope.meSilverlightPlayer.stop();
+			}
 		};
 
 		$scope.startPlay = function() {
+			$scope.updateStatus('loading ' + $scope.mediaUrl);
 
 			var vlcPlayer = document.getElementById('vlc-player');
 			if (vlcPlayer) {
+				$scope.updateStatus('==>vlc loading ' + $scope.mediaUrl);
 				var playlist = vlcPlayer.playlist;
 				playlist.stop();
 				playlist.clear();
 				playlist.add($scope.mediaUrl);
 				playlist.play();
+				$scope.updateStatus('==>vlc playing ' + $scope.mediaUrl);
 			} else {
-				$scope.updateStatus('starting ' + $scope.mediaUrl);
 				if ($scope.mePlayer) {
 					$scope.mePlayer.pause();
-					if ($scope.mePlayerType === 'flash') {
-						$scope.mePlayer = $scope.meFlashPlayer;
-					} else if ($scope.mePlayerType === 'silverlight') {
-						$scope.mePlayer = $scope.meSilverlightPlayer;
-					} else {
-						$scope.mePlayer = $scope.meHtml5Player;
-					}
+					$scope.choosePlayer();
 					$scope.mePlay();
 				} else {
 					$scope.initMePlayersAndPlay();
@@ -563,8 +580,10 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 					 }, false);
 
 					if ($scope.mePlayerType === 'flash') {
+						$scope.meFlashPlayer.setSrc($scope.mediaUrl);
+						$scope.meFlashPlayer.load();
+						$scope.meFlashPlayer.play();
 						$scope.mePlayer = $scope.meFlashPlayer;
-						$scope.mePlay();
 					}
 				},
 				// fires when a problem is detected
@@ -609,8 +628,10 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 					 }, false);
 
 					 if ($scope.mePlayerType === 'auto' || $scope.mePlayerType === 'html5') {
+						$scope.meHtml5Player.setSrc($scope.mediaUrl);
+						$scope.meHtml5Player.load();
+						$scope.meHtml5Player.play();
 					 	$scope.mePlayer = $scope.meHtml5Player;
-						$scope.mePlay();
                      }
 				},
 				// fires when a problem is detected
@@ -655,8 +676,10 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 					 }, false);
 
 					 if ($scope.mePlayerType === 'silverlight') {
+						$scope.meSilverlightPlayer.setSrc($scope.mediaUrl);
+						$scope.meSilverlightPlayer.load();
+						$scope.meSilverlightPlayer.play();
 					 	$scope.mePlayer = $scope.meSilverlightPlayer;
-						$scope.mePlay();
                      }
 				},
 				// fires when a problem is detected
