@@ -55,7 +55,7 @@ module.exports = {
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
 				'public/lib/jquery/dist/jquery.js',
                 //'public/lib/jplayer/jquery.jplayer.js',
-				'public/lib/mediaelement/dist/mediaelement-and-player.js'
+				'public/lib/mediaelement/build/mediaelement-and-player.js'
 
 			]
 		},
