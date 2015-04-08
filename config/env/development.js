@@ -18,7 +18,7 @@ module.exports = {
 		}
 	},
 	app: {
-		title: 'SoundPlayer - Development Environment'
+		title: 'mePlayer - Development Environment'
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',

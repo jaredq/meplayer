@@ -2,7 +2,7 @@
 
 module.exports = {
 	app: {
-		title: 'SoundPlayer',
+		title: 'mePlayer',
 		description: '',
 		keywords: ''
 	},
@@ -10,9 +10,9 @@ module.exports = {
 	templateEngine: 'swig',
 	// The secret should be set to a non-guessable string that
 	// is used to compute a session hash
-	sessionSecret: 'SoundPlayer',
+	sessionSecret: 'mePlayer',
 	// The name of the MongoDB collection to store sessions in
-	sessionCollection: 'sp-sessions',
+	sessionCollection: 'me-sessions',
 	// The session cookie settings
 	sessionCookie: {
 		path: '/',
