@@ -1,10 +1,4 @@
-<video
-		id="me-player" src=""
-		width="400" height="0">
-		<!-- Flash fallback for non-HTML5 browsers without JavaScript -->
-		<object width="320" height="0" type="application/x-shockwave-flash" data="/lib/mediaelement/build/flashmediaelement.swf">
-			<param name="movie" value="flashmediaelement.swf" />
-			<param name="flashvars" value="controls=true" />
-		</object>
+<div id="me-player-div">
+<video width="0" height="0" id="me-player" autoplay="true" type="{{mediaType}}" ng-src="{{trustSrc(mediaUrl)}}">
 </video>
-<span id="current-time" class="current-time" data-ng-bind="mediaTime"></span>
+</div>

@@ -1,23 +1,26 @@
 <section data-ng-controller="PlayerController">
 	<div class='row full-row'>
-
-		<input type="radio" ng-model="mePlayerType" name="mePlayerType" value="auto" id="player-auto"><label for="player-auto">Auto</label>
-		<input type="radio" ng-model="mePlayerType" name="mePlayerType" value="flash" id="player-flash"><label for="player-flash">Flash</label>
-		<input type="radio" ng-model="mePlayerType" name="mePlayerType" value="html5" id="player-html5"><label for="player-html5">HTML5</label>
-		<input type="radio" ng-model="mePlayerType" name="mePlayerType" value="silverlight" id="player-silverlight"><label for="player-silverlight">Silverlight</label>
-		<span id="me-player-status" class="current-time"></span>
+ 
+		Type:
+		<input type="radio" data-ng-model="mediaType" value="audio/aac" id="mt-audio-aac"><label for="mt-audio-aac">audio/aac</label>
+		<input type="radio" data-ng-model="mediaType" value="audio/ogg" id="mt-audio-ogg"><label for="mt-audio-ogg">audio/ogg</label>
+		<input type="radio" data-ng-model="mediaType" value="audio/mpeg" id="mt-audio-mpeg"><label for="mt-audio-mpeg">audio/mpeg</label>
+		<input type="radio" data-ng-model="mediaType" value="audio/mp4" id="mt-audio-mp4"><label for="mt-audio-mp4">audio/mp4</label>
+		<input type="radio" data-ng-model="mediaType" value="audio/wav" id="mt-audio-wav"><label for="mt-audio-wav">audio/wav</label>
+		<input type="radio" data-ng-model="mediaType" value="audio/flac" id="mt-audio-flac"><label for="mt-audio-flac">audio/flac</label>
+		<input type="radio" data-ng-model="mediaType" value="audio/flv" id="mt-audio-flv"><label for="mt-audio-flv">audio/flv</label>
+		<input type="radio" data-ng-model="mediaType" value="audio/wma" id="mt-audio-wma"><label for="mt-audio-wma">audio/wma</label>
+		<input type="radio" data-ng-model="mediaType" value="video/rtmp" id="mt-rtmp"><label for="mt-rtmp">rtmp</label>
+		<input type="radio" data-ng-model="mediaType" value="application/x-mpegURL" id="mt-application-x-mpegURL"><label for="mt-application-x-mpegURL">HLS</label>
 		<br/>
 
 		<input data-ng-model="mediaUrl" type="text" class="media-url" />
-		<input class="btn btn-default" data-ng-click="startPlay();" value="Start">
-		<input class="btn btn-default" data-ng-click="stopPlay();" value="Stop">
+		<input class="btn btn-default" data-ng-click="startPlay();" value="Start" style="width: 80px;">
+		<input class="btn btn-default" data-ng-click="pausePlay();" value="Pause" style="width: 80px;">
+		<input class="btn btn-default" data-ng-click="stopPlay();" value="Stop" style="width: 80px;"><br />
+		<span id="me-player-status" class="current-time"></span>
 
-
-		<section me-flash-player></section>
-
-		<section me-html5-player></section>
-
-		<section me-silverlight-player></section>
+		<section mediaelement-player data-ng-if="meReady" media-type="{{mediaType}}" media-url="{{mediaUrl}}"></section>
 
 	</div>
 </section>

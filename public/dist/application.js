@@ -424,6 +424,43 @@ angular.module('core').service('Menus', [
 ]);
 'use strict';
 
+// Local module config
+angular.module('local').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Local', 'local', 'item', '/local?');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('local').config(['$stateProvider',
+	function($stateProvider) {
+		// Local state routing
+		$stateProvider.
+		state('local', {
+			url: '/local',
+			templateUrl: 'modules/local/views/local.client.view.html'
+		});
+	}
+]);
+'use strict';
+/*global MediaElement, $*/
+
+angular.module('local').controller('LocalController', ['$scope',
+	function($scope) {		
+		
+		$scope.start = function() {
+			$('video').mediaelementplayer({
+				success: function(media, node, player) {
+					$('#' + node.id + '-mode').html('mode: ' + media.pluginType);
+				}
+			});
+		};
+	}
+]);
+'use strict';
+
 // Player module config
 angular.module('player').run(['Menus',
 	function(Menus) {
@@ -446,60 +483,43 @@ angular.module('player').config(['$stateProvider',
 	}
 ]);
 'use strict';
-/*global MediaElement*/
+/*global MediaElement, $*/
 
-angular.module('player').controller('PlayerController', ['$scope', 'Authentication', 'Menus',
-	function($scope, Authentication, Menus) {
+angular.module('player').controller('PlayerController', ['$scope', '$timeout', '$sce', 'Authentication', 'Menus',
+	function($scope, $timeout, $sce, Authentication, Menus) {
 		$scope.mediaTitle = '';
-		$scope.mediaUrl = '';
+		$scope.mediaUrl = 'mms://208.43.60.70/hope-fm2';
+		$scope.mediaType = 'audio/x-ms-wma';
 		$scope.mediaTime = '';
 		$scope.mePlayer = null;
-		$scope.meFlashPlayer = null;
-		$scope.meHtml5Player = null;
-		$scope.meSilverlightPlayer = null;
-		$scope.mePlayerType = 'auto';
-
+		$scope.meReady = true;
+		
 		$scope.updateStatus = function(msg) {
 			document.getElementById('me-player-status').innerHTML = msg;
 		};
 		
-		$scope.choosePlayer = function() {
-			if ($scope.mePlayerType === 'flash') {
-				$scope.updateStatus('==>flash loading ' + $scope.mediaUrl);
-				$scope.mePlayer = $scope.meFlashPlayer;
-			} else if ($scope.mePlayerType === 'silverlight') {
-				$scope.updateStatus('==>silverlight loading ' + $scope.mediaUrl);
-				$scope.mePlayer = $scope.meSilverlightPlayer;
-			} else {
-				$scope.updateStatus('==>html5 loading ' + $scope.mediaUrl);
-				$scope.mePlayer = $scope.meHtml5Player;
-			}
-		}
-		
 		$scope.mePlay = function() {
-			$scope.meStop();
+			if ($scope.mePlayer) {
+				$scope.mePlayer.play();
+			} else {
+				$scope.meReady = true;
+				$timeout(function() {$scope.initMePlayerAndPlay();}, 500);
+				
+			}
+		};
 
-			$scope.mePlayer.setSrc($scope.mediaUrl);
-			$scope.mePlayer.load();
-			$scope.mePlayer.play();
+		$scope.mePause = function() {
+			if ($scope.mePlayer) {
+				$scope.mePlayer.pause();
+			}
 		};
 
 		$scope.meStop = function() {
+			$scope.meReady = false;
 			if ($scope.mePlayer) {
 				$scope.mePlayer.pause();
 				$scope.mePlayer.stop();
-			}
-			if ($scope.meFlashPlayer) {
-				$scope.meFlashPlayer.pause();
-				$scope.meFlashPlayer.stop();
-			}
-			if ($scope.meHtml5Player) {
-				$scope.meHtml5Player.pause();
-				$scope.meHtml5Player.stop();
-			}
-			if ($scope.meSilverlightPlayer) {
-				$scope.meSilverlightPlayer.pause();
-				$scope.meSilverlightPlayer.stop();
+				$scope.mePlayer = null;
 			}
 		};
 
@@ -516,13 +536,20 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 				playlist.play();
 				$scope.updateStatus('==>vlc playing ' + $scope.mediaUrl);
 			} else {
-				if ($scope.mePlayer) {
-					$scope.mePlayer.pause();
-					$scope.choosePlayer();
-					$scope.mePlay();
-				} else {
-					$scope.initMePlayersAndPlay();
-				}
+				$scope.updateStatus('starting...');
+				$scope.mePlay();				
+			}
+		};
+
+		$scope.pausePlay = function() {
+			var vlcPlayer = document.getElementById('vlc-player');
+			if (vlcPlayer) {
+				var playlist = vlcPlayer.playlist;
+				playlist.pause();
+			} else {
+				$scope.updateStatus('pausing...');
+				$scope.mePause();
+				$scope.updateStatus('paused');
 			}
 		};
 
@@ -534,157 +561,33 @@ angular.module('player').controller('PlayerController', ['$scope', 'Authenticati
 				playlist.clear();
 			} else {
 				$scope.updateStatus('stopping...');
-				if ($scope.mePlayer) {
-					$scope.meStop();
-				}
+				$scope.meStop();
 				$scope.updateStatus('stop');
 			}
 		};
+		
+		$scope.initMePlayerAndPlay = function() {
+			// TODO 
+			console.log('initMePlayerAndPlay');
+			new MediaElement('me-player', {
+				success: function (mediaElement, domObject, player) {
+					console.log('initMePlayerAndPlay-success');
+					console.log(mediaElement.pluginType);
 
-		$scope.initMePlayersAndPlay = function() {
-
-			new MediaElement('me-flash-player', {
-				// shows debug errors on screen
-				enablePluginDebug: false,
-				// remove or reorder to change plugin priority
-				plugins: ['flash','silverlight'],
-				// specify to force MediaElement to use a particular video or audio type
-				type: '',
-				// path to Flash and Silverlight plugins
-				pluginPath: '/lib/mediaelement/build/',
-				// name of flash file
-				flashName: 'flashmediaelement.swf',
-				// name of silverlight file
-				silverlightName: 'silverlightmediaelement.xap',
-				// default if the <video width> is not specified
-				defaultVideoWidth: 0,
-				// default if the <video height> is not specified
-				defaultVideoHeight: 0,
-				// overrides <video width>
-				pluginWidth: -1,
-				// overrides <video height>
-				pluginHeight: -1,
-				// rate in milliseconds for Flash and Silverlight to fire the timeupdate event
-				// larger number is less accurate, but less strain on plugin->JavaScript bridge
-				timerRate: 250,
-				// method that fires when the Flash or Silverlight object is ready
-				success: function (mediaElement, domObject) {
-
-					$scope.meFlashPlayer = mediaElement;
+					$scope.mePlayer = mediaElement;
 
 					 // add event listener
 					 mediaElement.addEventListener('timeupdate', function(e) {
-
-						 $scope.updateStatus('===>flash: ' + mediaElement.currentTime);
-
+						console.log('initMePlayerAndPlay-timeupdate');
+						$scope.updateStatus('===>' + mediaElement.pluginType + ': ' + mediaElement.currentTime);
 					 }, false);
-
-					if ($scope.mePlayerType === 'flash') {
-						$scope.meFlashPlayer.setSrc($scope.mediaUrl);
-						$scope.meFlashPlayer.load();
-						$scope.meFlashPlayer.play();
-						$scope.mePlayer = $scope.meFlashPlayer;
-					}
+					 
+					console.log('initMePlayerAndPlay-success-end');
 				},
 				// fires when a problem is detected
 				error: function () {
+					console.log('initMePlayerAndPlay-error');
 					//$scope.updateStatus('Found error when init me-flash-player.');
-				}
-			});
-			new MediaElement('me-html5-player', {
-				// shows debug errors on screen
-				enablePluginDebug: false,
-				// remove or reorder to change plugin priority
-				plugins: ['flash','silverlight'],
-				// specify to force MediaElement to use a particular video or audio type
-				type: '',
-				// path to Flash and Silverlight plugins
-				pluginPath: '/lib/mediaelement/build/',
-				// name of flash file
-				flashName: 'flashmediaelement.swf',
-				// name of silverlight file
-				silverlightName: 'silverlightmediaelement.xap',
-				// default if the <video width> is not specified
-				defaultVideoWidth: 0,
-				// default if the <video height> is not specified
-				defaultVideoHeight: 0,
-				// overrides <video width>
-				pluginWidth: -1,
-				// overrides <video height>
-				pluginHeight: -1,
-				// rate in milliseconds for Flash and Silverlight to fire the timeupdate event
-				// larger number is less accurate, but less strain on plugin->JavaScript bridge
-				timerRate: 250,
-				// method that fires when the Flash or Silverlight object is ready
-				success: function (mediaElement, domObject) {
-
-					$scope.meHtml5Player = mediaElement;
-
-					 // add event listener
-					 mediaElement.addEventListener('timeupdate', function(e) {
-
-						 $scope.updateStatus('===>html5: ' + mediaElement.currentTime);
-
-					 }, false);
-
-					 if ($scope.mePlayerType === 'auto' || $scope.mePlayerType === 'html5') {
-						$scope.meHtml5Player.setSrc($scope.mediaUrl);
-						$scope.meHtml5Player.load();
-						$scope.meHtml5Player.play();
-					 	$scope.mePlayer = $scope.meHtml5Player;
-                     }
-				},
-				// fires when a problem is detected
-				error: function () {
-					//$scope.updateStatus('Found error when init me-html5-player.');
-				}
-			});
-			new MediaElement('me-silverlight-player', {
-				// shows debug errors on screen
-				enablePluginDebug: false,
-				// remove or reorder to change plugin priority
-				plugins: ['flash','silverlight'],
-				// specify to force MediaElement to use a particular video or audio type
-				type: '',
-				// path to Flash and Silverlight plugins
-				pluginPath: '/lib/mediaelement/build/',
-				// name of flash file
-				flashName: 'flashmediaelement.swf',
-				// name of silverlight file
-				silverlightName: 'silverlightmediaelement.xap',
-				// default if the <video width> is not specified
-				defaultVideoWidth: 0,
-				// default if the <video height> is not specified
-				defaultVideoHeight: 0,
-				// overrides <video width>
-				pluginWidth: -1,
-				// overrides <video height>
-				pluginHeight: -1,
-				// rate in milliseconds for Flash and Silverlight to fire the timeupdate event
-				// larger number is less accurate, but less strain on plugin->JavaScript bridge
-				timerRate: 250,
-				// method that fires when the Flash or Silverlight object is ready
-				success: function (mediaElement, domObject) {
-
-					$scope.meSilverlightPlayer = mediaElement;
-
-					 // add event listener
-					 mediaElement.addEventListener('timeupdate', function(e) {
-
-						 $scope.updateStatus('===>silverlight: ' + mediaElement.currentTime);
-
-					 }, false);
-
-					 if ($scope.mePlayerType === 'silverlight') {
-						$scope.meSilverlightPlayer.setSrc($scope.mediaUrl);
-						$scope.meSilverlightPlayer.load();
-						$scope.meSilverlightPlayer.play();
-					 	$scope.mePlayer = $scope.meSilverlightPlayer;
-                     }
-				},
-				// fires when a problem is detected
-				error: function () {
-					//$scope.updateStatus('Found error when init me-silverlight-player.');
 				}
 			});
 		};
@@ -740,12 +643,19 @@ angular.module('player').directive('meSilverlightPlayer', [
 
 'use strict';
 
-angular.module('player').directive('mediaelementPlayer', [
-	function() {
+angular.module('player').directive('mediaelementPlayer', ['$sce',
+	function($sce) {
 		return {
+			link: function(scope, element, attributes){
+				scope.mediaType = attributes.mediaType;
+				scope.mediaUrl = attributes.mediaUrl;
+				
+				scope.trustSrc = function(src) {
+					return $sce.trustAsResourceUrl(src);
+				};
+			},
 			restrict: 'A',
 			scope: {
-				report: '=',
 			},
 			templateUrl: 'modules/player/views/mediaelement-player.client.view.html'
 		};

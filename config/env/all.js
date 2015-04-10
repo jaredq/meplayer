@@ -44,7 +44,7 @@ module.exports = {
 		lib: {
 			css: [
 				'public/lib/bootstrap/dist/css/bootstrap.css',
-				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+				'public/lib/bootstrap/dist/css/bootstrap-theme.css'
 			],
 			js: [
 				'public/lib/angular/angular.js',
@@ -54,8 +54,7 @@ module.exports = {
 				'public/lib/angular-ui-utils/ui-utils.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
 				'public/lib/jquery/dist/jquery.js',
-                //'public/lib/jplayer/jquery.jplayer.js',
-				'public/lib/mediaelement/build/mediaelement-and-player.js'
+				'public/lib/mediaelement/build/mediaelement.js'
 
 			]
 		},
