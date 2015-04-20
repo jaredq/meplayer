@@ -1,0 +1,26 @@
+<section data-ng-controller="WrapsController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="wrap.name"></h1>
+		<span class="lead" data-ng-bind="wrap.contentType"></span>
+	</div>
+	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == wrap.user._id))">
+		<a class="btn btn-primary" href="/#!/wraps/{{wrap._id}}/edit">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="remove();">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="playIt(wrap);">
+			<i class="glyphicon glyphicon-headphones"></i>
+		</a>
+	</div>
+	<small>
+		<em class="text-muted">
+			Posted on
+			<span data-ng-bind="wrap.created | date:'mediumDate'"></span>
+			by
+			<span data-ng-bind="wrap.user.displayName"></span>
+		</em>
+	</small>
+	<p class="lead" data-ng-bind="wrap.content"></p>
+</section>
