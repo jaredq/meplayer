@@ -27,3 +27,7 @@
 .current-time {
 	color: white;
 }
+
+.me-player-div {
+	display: none;
+}
