@@ -11,7 +11,8 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$rootSco
 			// Create new Article object
 			var article = new Articles({
 				title: this.title,
-				content: this.content
+				content: this.content,
+				type: this.type
 			});
 
 			// Redirect after save

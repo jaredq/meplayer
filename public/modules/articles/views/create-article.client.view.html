@@ -20,7 +20,17 @@
 				<div class="form-group">
 					<label class="control-label" for="content">Type</label>
 					<div class="controls">
-						<input name="type" type="text" data-ng-model="type" id="title" class="form-control" placeholder="Type" required>
+						<input name="type" type="text" data-ng-model="type" id="type" class="form-control" placeholder="Type" required>
+						<input type="radio" data-ng-model="type" value="audio/aac" id="mt-audio-aac"><label for="mt-audio-aac" required>audio/aac</label>
+						<input type="radio" data-ng-model="type" value="audio/ogg" id="mt-audio-ogg"><label for="mt-audio-ogg" required>audio/ogg</label>
+						<input type="radio" data-ng-model="type" value="audio/mpeg" id="mt-audio-mpeg"><label for="mt-audio-mpeg" required>audio/mpeg</label>
+						<input type="radio" data-ng-model="type" value="audio/mp4" id="mt-audio-mp4"><label for="mt-audio-mp4" required>audio/mp4</label>
+						<input type="radio" data-ng-model="type" value="audio/wav" id="mt-audio-wav"><label for="mt-audio-wav" required>audio/wav</label>
+						<input type="radio" data-ng-model="type" value="audio/flac" id="mt-audio-flac"><label for="mt-audio-flac" required>audio/flac</label>
+						<input type="radio" data-ng-model="type" value="audio/flv" id="mt-audio-flv"><label for="mt-audio-flv" required>audio/flv</label>
+						<input type="radio" data-ng-model="type" value="audio/wma" id="mt-audio-wma"><label for="mt-audio-wma" required>audio/wma</label>
+						<input type="radio" data-ng-model="type" value="video/rtmp" id="mt-rtmp"><label for="mt-rtmp" required>RTMP</label>
+						<input type="radio" data-ng-model="type" value="application/x-mpegURL" id="mt-application-x-mpegURL" required><label for="mt-application-x-mpegURL">HLS&M3U8</label>
 					</div>
 				</div>
 				<div class="form-group">

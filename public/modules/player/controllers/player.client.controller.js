@@ -41,6 +41,8 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 
 		$scope.startPlay = function() {
 			$scope.updateStatus('loading ' + $scope.mediaUrl);
+			console.log($scope.mediaUrl);
+			console.log($scope.mediaType);
 
 			var vlcPlayer = document.getElementById('vlc-player');
 			if (vlcPlayer) {
