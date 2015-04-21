@@ -16,6 +16,7 @@
 			</button>
 			<h4 class="list-group-item-heading" data-ng-bind="article.title"></h4>
 			<p class="list-group-item-text" data-ng-bind="article.content"></p>
+			<h5 class="list-group-item-heading" data-ng-bind="article.type"></h5>
 		</a>
 	</div>
 	<div class="alert alert-warning text-center" data-ng-if="articles.$resolved && !articles.length">

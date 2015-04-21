@@ -103,13 +103,14 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 				// fires when a problem is detected
 				error: function () {
 					console.log('initMePlayerAndPlay-error');
-					//$scope.updateStatus('Found error when init me-flash-player.');
+					$scope.updateStatus('error');
 				}
 			});
 		};
 
-		$scope.$on('playit', function(event, content){
-			$scope.mediaUrl = content;
+		$scope.$on('playit', function(event, args){
+			$scope.mediaUrl = args.content;
+			$scope.mediaType = args.type;			
 			$scope.startPlay();
 		});
 	}

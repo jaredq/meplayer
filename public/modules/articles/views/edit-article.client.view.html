@@ -23,6 +23,15 @@
 						<p ng-show="articleForm.content.$error.required" class="text-danger">Content is required</p>
 					</div>
 				</div>
+				<div class="form-group" ng-class="{ 'has-error' : submitted && articleForm.type.$invalid}">
+					<label class="control-label" for="type">Type</label>
+					<div class="controls">
+						<input name="type" type="text" data-ng-model="article.type" id="type" class="form-control" placeholder="Type" required>
+					</div>
+					<div ng-show="submitted && articleForm.type.$invalid" class="help-block">
+						<p ng-show="articleForm.type.$error.required" class="text-danger">Type is required</p>
+					</div>
+				</div>
 				<div class="form-group">
 					<input type="submit" value="Update" class="btn btn-default">
 				</div>

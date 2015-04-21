@@ -66,7 +66,7 @@ angular.module('wraps').controller('WrapsController', ['$scope', '$rootScope', '
 		};
 
 		$scope.playIt = function(wrap) {
-			$rootScope.$broadcast('playit', '/wrap-mmsh/' + wrap._id);
+			$rootScope.$broadcast('playit', {content: '/wrap-mmsh/' + wrap._id, type: 'application/x-mpegURL'});
 		};
 	}
 ]);

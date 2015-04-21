@@ -71,7 +71,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$rootSco
 		};
 
 		$scope.playIt = function(article) {
-			$rootScope.$broadcast('playit', article.content);
+			$rootScope.$broadcast('playit', {content: article.content, type: article.type});
 		};
 	}
 ]);
