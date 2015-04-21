@@ -183,7 +183,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$rootSco
 		};
 
 		$scope.playIt = function(article) {
-			$rootScope.$broadcast('playit', article.content);
+			$rootScope.$broadcast('playit', {content: article.content, type: article.type});
 		};
 	}
 ]);
@@ -591,13 +591,14 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 				// fires when a problem is detected
 				error: function () {
 					console.log('initMePlayerAndPlay-error');
-					//$scope.updateStatus('Found error when init me-flash-player.');
+					$scope.updateStatus('error');
 				}
 			});
 		};
 
-		$scope.$on('playit', function(event, content){
-			$scope.mediaUrl = content;
+		$scope.$on('playit', function(event, args){
+			$scope.mediaUrl = args.content;
+			$scope.mediaType = args.type;			
 			$scope.startPlay();
 		});
 	}
@@ -1031,7 +1032,7 @@ angular.module('wraps').controller('WrapsController', ['$scope', '$rootScope', '
 		};
 
 		$scope.playIt = function(wrap) {
-			$rootScope.$broadcast('playit', '/wrap-mmsh/' + wrap._id);
+			$rootScope.$broadcast('playit', {content: '/wrap-mmsh/' + wrap._id, type: 'application/x-mpegURL'});
 		};
 	}
 ]);
