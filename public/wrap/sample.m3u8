@@ -4,4 +4,4 @@
 #EXT-X-TARGETDURATION:11
 #EXT-X-MEDIA-SEQUENCE:237328
 #EXTINF:1,
-http://live.radio-vhr.de/radiovhr.mp3
+rtmp://streymi.skjarinn.is:80/K100/k100.stream

@@ -20,7 +20,7 @@ exports.readSample = function(req, res) {
 	res.set('Server', 'Cougar/9.6.7600.16564');
 	res.set('Supported', 'com.microsoft.wm.srvppair, com.microsoft.wm.sswitch, com.microsoft.wm.predstrm, com.microsoft.wm.fastcache, com.microsoft.wm.startupprofile');
 	res.set(200);
-	res.send('[Reference]' + os.EOL + 'Ref1=mmsh://vp.rice.edu/KTRU2001?MSWMExt=.asf' + os.EOL);
+	res.send('[Reference]' + os.EOL + 'Ref1=mmsh://mediau.yle.fi/liveyleradio1?MSWMExt=.asf' + os.EOL);
 	res.end();
 };
 

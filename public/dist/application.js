@@ -72,6 +72,10 @@ ApplicationConfiguration.registerModule('player');
 ApplicationConfiguration.registerModule('users');
 'use strict';
 
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('wraps');
+'use strict';
+
 // Configuring the Articles module
 angular.module('articles').run(['Menus',
 	function(Menus) {
@@ -917,6 +921,127 @@ angular.module('users').factory('Authentication', ['$window', function($window) 
 angular.module('users').factory('Users', ['$resource',
 	function($resource) {
 		return $resource('users', {}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('wraps').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Wraps', 'wraps', 'dropdown', '/wraps(/create)?');
+		Menus.addSubMenuItem('topbar', 'wraps', 'List Wraps', 'wraps');
+		Menus.addSubMenuItem('topbar', 'wraps', 'New Wrap', 'wraps/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('wraps').config(['$stateProvider',
+	function($stateProvider) {
+		// Wraps state routing
+		$stateProvider.
+		state('listWraps', {
+			url: '/wraps',
+			templateUrl: 'modules/wraps/views/list-wraps.client.view.html'
+		}).
+		state('createWrap', {
+			url: '/wraps/create',
+			templateUrl: 'modules/wraps/views/create-wrap.client.view.html'
+		}).
+		state('viewWrap', {
+			url: '/wraps/:wrapId',
+			templateUrl: 'modules/wraps/views/view-wrap.client.view.html'
+		}).
+		state('editWrap', {
+			url: '/wraps/:wrapId/edit',
+			templateUrl: 'modules/wraps/views/edit-wrap.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Wraps controller
+angular.module('wraps').controller('WrapsController', ['$scope', '$rootScope', '$stateParams', '$location', 'Authentication', 'Wraps',
+	function($scope, $rootScope, $stateParams, $location, Authentication, Wraps) {
+		$scope.authentication = Authentication;
+
+		// Create new Wrap
+		$scope.create = function() {
+			// Create new Wrap object
+			var wrap = new Wraps ({
+				name: this.name,
+				content: this.content,
+				contentType: this.contentType
+			});
+
+			// Redirect after save
+			wrap.$save(function(response) {
+				$location.path('wraps/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Wrap
+		$scope.remove = function(wrap) {
+			if ( wrap ) { 
+				wrap.$remove();
+
+				for (var i in $scope.wraps) {
+					if ($scope.wraps [i] === wrap) {
+						$scope.wraps.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.wrap.$remove(function() {
+					$location.path('wraps');
+				});
+			}
+		};
+
+		// Update existing Wrap
+		$scope.update = function() {
+			var wrap = $scope.wrap;
+
+			wrap.$update(function() {
+				$location.path('wraps/' + wrap._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Wraps
+		$scope.find = function() {
+			$scope.wraps = Wraps.query();
+		};
+
+		// Find existing Wrap
+		$scope.findOne = function() {
+			$scope.wrap = Wraps.get({ 
+				wrapId: $stateParams.wrapId
+			});
+		};
+
+		$scope.playIt = function(wrap) {
+			$rootScope.$broadcast('playit', '/wrap-mmsh/' + wrap._id);
+		};
+	}
+]);
+'use strict';
+
+//Wraps service used to communicate Wraps REST endpoints
+angular.module('wraps').factory('Wraps', ['$resource',
+	function($resource) {
+		return $resource('wraps/:wrapId', { wrapId: '@_id'
+		}, {
 			update: {
 				method: 'PUT'
 			}
