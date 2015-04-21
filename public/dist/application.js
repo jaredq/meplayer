@@ -123,7 +123,8 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$rootSco
 			// Create new Article object
 			var article = new Articles({
 				title: this.title,
-				content: this.content
+				content: this.content,
+				type: this.type
 			});
 
 			// Redirect after save
@@ -529,6 +530,8 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 
 		$scope.startPlay = function() {
 			$scope.updateStatus('loading ' + $scope.mediaUrl);
+			console.log($scope.mediaUrl);
+			console.log($scope.mediaType);
 
 			var vlcPlayer = document.getElementById('vlc-player');
 			if (vlcPlayer) {
