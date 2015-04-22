@@ -498,30 +498,43 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 		$scope.mediaTime = '';
 		$scope.mePlayer = null;
 		$scope.meReady = true;
+		$scope.isPaused = false;
 		
 		$scope.updateStatus = function(msg) {
 			document.getElementById('me-player-status').innerHTML = msg;
 		};
 		
 		$scope.mePlay = function() {
-			if ($scope.mePlayer) {
+			console.debug('mePlay()');
+			if ($scope.mePlayer && $scope.isPaused) {
+				console.debug('mePlay():0');
 				$scope.mePlayer.play();
 			} else {
-				$scope.meReady = true;
-				$timeout(function() {$scope.initMePlayerAndPlay();}, 500);
-				
+				console.debug('mePlay():1');
+				$scope.meReady = false;
+				$timeout(function() {
+					$scope.meReady = true;
+					$timeout(function() {$scope.initMePlayerAndPlay();}, 500);
+				}, 500);
 			}
+			$scope.isPaused = false;
 		};
 
 		$scope.mePause = function() {
+			console.debug('mePause()');
 			if ($scope.mePlayer) {
+				console.debug('mePause():0');
 				$scope.mePlayer.pause();
+				$scope.isPaused = true;
 			}
 		};
 
 		$scope.meStop = function() {
+			console.debug('meStop()');
+			$scope.isPaused = false;
 			$scope.meReady = false;
 			if ($scope.mePlayer) {
+				console.debug('meStop():0');
 				$scope.mePlayer.pause();
 				$scope.mePlayer.stop();
 				$scope.mePlayer = null;
@@ -530,8 +543,8 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 
 		$scope.startPlay = function() {
 			$scope.updateStatus('loading ' + $scope.mediaUrl);
-			console.log($scope.mediaUrl);
-			console.log($scope.mediaType);
+			console.debug($scope.mediaUrl);
+			console.debug($scope.mediaType);
 
 			var vlcPlayer = document.getElementById('vlc-player');
 			if (vlcPlayer) {
@@ -575,25 +588,26 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 		
 		$scope.initMePlayerAndPlay = function() {
 			// TODO 
-			console.log('initMePlayerAndPlay');
-			new MediaElement('me-player', {
+			console.debug('initMePlayerAndPlay');
+			$('#me-player').mediaelementplayer({
+				plugins: ['silverlight','flash','youtube','vimeo'],
 				success: function (mediaElement, domObject, player) {
-					console.log('initMePlayerAndPlay-success');
-					console.log(mediaElement.pluginType);
+					console.debug('initMePlayerAndPlay-success');
+					console.debug(mediaElement.pluginType);
 
 					$scope.mePlayer = mediaElement;
 
 					 // add event listener
 					 mediaElement.addEventListener('timeupdate', function(e) {
-						console.log('initMePlayerAndPlay-timeupdate');
+						console.debug('initMePlayerAndPlay-timeupdate');
 						$scope.updateStatus('===>' + mediaElement.pluginType + ': ' + mediaElement.currentTime);
 					 }, false);
 					 
-					console.log('initMePlayerAndPlay-success-end');
+					console.debug('initMePlayerAndPlay-success-end');
 				},
 				// fires when a problem is detected
 				error: function () {
-					console.log('initMePlayerAndPlay-error');
+					console.debug('initMePlayerAndPlay-error');
 					$scope.updateStatus('error');
 				}
 			});
