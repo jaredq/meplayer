@@ -491,12 +491,52 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 		$scope.mePlayer = null;
 		$scope.meReady = true;
 		$scope.isPaused = false;
+		$scope.vlcPlayer = null;
 		
 		$scope.updateStatus = function(msg) {
 			document.getElementById('me-player-status').innerHTML = msg;
 		};
 		
+		$scope.clearPause = function() {
+			$scope.isPaused = false;
+		};
+
+		$scope.vlcPlay = function() {
+			$scope.updateStatus('==>vlc loading ' + $scope.mediaUrl);
+			console.debug('vlcPlay()');
+			var playlist = $scope.vlcPlayer.playlist;
+			if (!$scope.isPaused) {
+				console.debug('vlcPlay():0');
+				playlist.stop();
+				playlist.clear();
+				playlist.add($scope.mediaUrl);
+			}
+			playlist.play();
+			$scope.isPaused = false;
+			$scope.updateStatus('==>vlc playing');
+		};
+
+		$scope.vlcPause = function() {
+			$scope.updateStatus('==>vlc pausing');
+			console.debug('vlcPause()');
+			var playlist = $scope.vlcPlayer.playlist;
+			playlist.pause();
+			$scope.isPaused = true;
+			$scope.updateStatus('==>vlc paused');
+		};
+
+		$scope.vlcStop = function() {
+			$scope.updateStatus('==>vlc stopping');
+			console.debug('vlcStop()');
+			var playlist = $scope.vlcPlayer.playlist;
+			playlist.stop();
+			playlist.clear();
+			$scope.isPaused = false;
+			$scope.updateStatus('==>vlc stopped');
+		};
+
 		$scope.mePlay = function() {
+			$scope.updateStatus('==>me loading ' + $scope.mediaUrl);
 			console.debug('mePlay()');
 			if ($scope.mePlayer && $scope.isPaused) {
 				console.debug('mePlay():0');
@@ -506,22 +546,27 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 				$scope.meReady = false;
 				$timeout(function() {
 					$scope.meReady = true;
-					$timeout(function() {$scope.initMePlayerAndPlay();}, 500);
+					$timeout(function() {
+						$scope.initMePlayerAndPlay();
+						}, 500);
 				}, 500);
 			}
 			$scope.isPaused = false;
 		};
 
 		$scope.mePause = function() {
+			$scope.updateStatus('==>me pausing');
 			console.debug('mePause()');
 			if ($scope.mePlayer) {
 				console.debug('mePause():0');
 				$scope.mePlayer.pause();
 				$scope.isPaused = true;
 			}
+			$scope.updateStatus('==>me paused');
 		};
 
 		$scope.meStop = function() {
+			$scope.updateStatus('==>me stopping');
 			console.debug('meStop()');
 			$scope.isPaused = false;
 			$scope.meReady = false;
@@ -531,6 +576,7 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 				$scope.mePlayer.stop();
 				$scope.mePlayer = null;
 			}
+			$scope.updateStatus('==>me stopped');
 		};
 
 		$scope.startPlay = function() {
@@ -540,41 +586,30 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 
 			var vlcPlayer = document.getElementById('vlc-player');
 			if (vlcPlayer) {
-				$scope.updateStatus('==>vlc loading ' + $scope.mediaUrl);
-				var playlist = vlcPlayer.playlist;
-				playlist.stop();
-				playlist.clear();
-				playlist.add($scope.mediaUrl);
-				playlist.play();
-				$scope.updateStatus('==>vlc playing ' + $scope.mediaUrl);
+				$scope.vlcPlayer = vlcPlayer;
+				$scope.vlcPlay();
 			} else {
-				$scope.updateStatus('starting...');
 				$scope.mePlay();				
 			}
 		};
 
 		$scope.pausePlay = function() {
+			$scope.updateStatus('pausing...');
 			var vlcPlayer = document.getElementById('vlc-player');
 			if (vlcPlayer) {
-				var playlist = vlcPlayer.playlist;
-				playlist.pause();
+				$scope.vlcPause();
 			} else {
-				$scope.updateStatus('pausing...');
 				$scope.mePause();
-				$scope.updateStatus('paused');
 			}
 		};
 
 		$scope.stopPlay = function() {
+			$scope.updateStatus('stopping...');
 			var vlcPlayer = document.getElementById('vlc-player');
 			if (vlcPlayer) {
-				var playlist = vlcPlayer.playlist;
-				playlist.stop();
-				playlist.clear();
+				$scope.vlcStop();
 			} else {
-				$scope.updateStatus('stopping...');
 				$scope.meStop();
-				$scope.updateStatus('stop');
 			}
 		};
 		
