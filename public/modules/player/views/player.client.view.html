@@ -15,12 +15,14 @@
 		<input type="radio" data-ng-model="mediaType" value="application/x-mpegURL" id="mt-application-x-mpegURL"><label for="mt-application-x-mpegURL">HLS&M3U8</label>
 		<br/>
 
+		<input type="checkbox" data-ng-model="useVlc" id="chk-use-vlc" /><label for="chk-use-vlc">VLC</label>
 		<input data-ng-model="mediaUrl" type="text" class="media-url" />
 		<input class="btn btn-default" data-ng-click="startPlay();" value="Start" style="width: 80px;">
 		<input class="btn btn-default" data-ng-click="pausePlay();" value="Pause" style="width: 80px;">
 		<input class="btn btn-default" data-ng-click="stopPlay();" value="Stop" style="width: 80px;"><br />
 		<span id="me-player-status" class="current-time"></span>
 
+		<section vlc-player data-ng-if="useVlc"></section>
 		<section mediaelement-player data-ng-if="meReady" media-type="{{mediaType}}" media-url="{{mediaUrl}}"></section>
 
 	</div>

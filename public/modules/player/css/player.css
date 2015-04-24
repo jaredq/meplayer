@@ -28,6 +28,13 @@
 	color: white;
 }
 
+.vlc-player-div {
+	/*display: none;*/
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
 .me-player-div {
 	/*display: none;*/
 	width: 1px;
