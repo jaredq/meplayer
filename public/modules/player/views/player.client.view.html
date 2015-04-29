@@ -15,15 +15,20 @@
 		<input type="radio" data-ng-model="mediaType" value="application/x-mpegURL" id="mt-application-x-mpegURL"><label for="mt-application-x-mpegURL">HLS&M3U8</label>
 		<br/>
 
-		<input type="checkbox" data-ng-model="useVlc" id="chk-use-vlc" /><label for="chk-use-vlc">VLC</label>
+		<input type="radio" data-ng-model="playerType" value="me" id="pt-me" /><label for="pt-me">ME</label>
+		<input type="radio" data-ng-model="playerType" value="vjs" id="pt-vjs" /><label for="pt-vjs">VJS</label>
+		<input type="radio" data-ng-model="playerType" value="vlc" id="pt-vlc" /><label for="pt-vlc">VLC</label>
 		<input data-ng-model="mediaUrl" type="text" class="media-url" />
 		<input class="btn btn-default" data-ng-click="startPlay();" value="Start" style="width: 80px;">
 		<input class="btn btn-default" data-ng-click="pausePlay();" value="Pause" style="width: 80px;">
 		<input class="btn btn-default" data-ng-click="stopPlay();" value="Stop" style="width: 80px;"><br />
-		<span id="me-player-status" class="current-time"></span>
+		<span id="player-status" data-ng-bind="playerStatus" class="current-time"></span>
 
-		<section vlc-player data-ng-if="useVlc"></section>
-		<section mediaelement-player data-ng-if="meReady" media-type="{{mediaType}}" media-url="{{mediaUrl}}"></section>
+		<section vlc-player data-ng-if="isVlcReady()"></section>
+
+		<section vjs-player data-ng-if="isVjsReady()" media-type="{{mediaType}}" media-url="{{mediaUrl}}"></section>
+		
+		<section mediaelement-player data-ng-if="isMeReady()" media-type="{{mediaType}}" media-url="{{mediaUrl}}"></section>
 
 	</div>
 </section>

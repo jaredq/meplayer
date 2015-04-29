@@ -3,21 +3,41 @@
 
 angular.module('player').controller('PlayerController', ['$scope', '$timeout', '$sce', 'Authentication', 'Menus',
 	function($scope, $timeout, $sce, Authentication, Menus) {
+		var ME = 'me', VLC = 'vlc', VJS = 'vjs';
+
 		$scope.mediaTitle = '';
 		$scope.mediaUrl = 'mms://208.43.60.70/hope-fm2';
-		$scope.mediaType = 'audio/x-ms-wma';
+		$scope.mediaType = 'audio/wma';
 		$scope.mediaTime = '';
+		$scope.playerType = ME;
+		$scope.playerStatus = '';
+		$scope.isPaused = false;
+
 		$scope.mePlayer = null;
 		$scope.meReady = true;
-		$scope.isPaused = false;
+		$scope.vjsPlayer = null;
+		$scope.vjsReady = true;
 		$scope.vlcPlayer = null;
+
 		
 		$scope.updateStatus = function(msg) {
-			document.getElementById('me-player-status').innerHTML = msg;
+			document.getElementById('player-status').innerHTML = msg;
 		};
 		
 		$scope.clearPause = function() {
 			$scope.isPaused = false;
+		};
+
+		$scope.isVlcReady = function() {
+			return $scope.playerType === VLC;
+		};
+
+		$scope.isVjsReady = function() {
+			return $scope.vjsReady && $scope.playerType === VJS;
+		};
+
+		$scope.isMeReady = function() {
+			return $scope.meReady && $scope.playerType === ME;
 		};
 
 		$scope.vlcPlay = function() {
@@ -98,37 +118,92 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 			$scope.updateStatus('==>me stopped');
 		};
 
+		$scope.vjsPlay = function() {
+			$scope.updateStatus('==>vjs loading ' + $scope.mediaUrl);
+			console.debug('vjsPlay()');
+			if ($scope.vjsPlayer && $scope.isPaused) {
+				console.debug('vjsPlay():0');
+				$scope.vjsPlayer.play();
+			} else {
+				console.debug('vjsPlay():1');
+				$scope.vjsReady = false;
+				$timeout(function() {
+					$scope.vjsReady = true;
+					$timeout(function() {
+						$scope.initVjsPlayerAndPlay();
+						}, 500);
+				}, 500);
+			}
+			$scope.isPaused = false;
+		};
+
+		$scope.vjsPause = function() {
+			$scope.updateStatus('==>vjs pausing');
+			console.debug('vjsPause()');
+			if ($scope.vjsPlayer) {
+				console.debug('vjsPause():0');
+				$scope.vjsPlayer.pause();
+				$scope.isPaused = true;
+			}
+			$scope.updateStatus('==>vjs paused');
+		};
+
+		$scope.vjsStop = function() {
+			$scope.updateStatus('==>vjs stopping');
+			console.debug('vjsStop()');
+			$scope.isPaused = false;
+			$scope.vjsReady = false;
+			if ($scope.vjsPlayer) {
+				console.debug('vjsStop():0');
+				$scope.vjsPlayer.pause();
+				//$scope.vjsPlayer.stop();
+				$scope.vjsPlayer = null;
+			}
+			$scope.updateStatus('==>vjs stopped');
+		};
+
 		$scope.startPlay = function() {
 			$scope.updateStatus('loading ' + $scope.mediaUrl);
 			console.debug($scope.mediaUrl);
 			console.debug($scope.mediaType);
-
-			var vlcPlayer = document.getElementById('vlc-player');
-			if (vlcPlayer) {
-				$scope.vlcPlayer = vlcPlayer;
-				$scope.vlcPlay();
+			if ($scope.playerType === ME) {
+				$scope.mePlay();
+			} else if ($scope.playerType === VJS) {
+				$scope.vjsPlay();
 			} else {
-				$scope.mePlay();				
+				var vlcPlayer = document.getElementById('vlc-player');
+				if (vlcPlayer) {
+					$scope.vlcPlayer = vlcPlayer;
+					$scope.vlcPlay();
+				}		
 			}
 		};
 
 		$scope.pausePlay = function() {
 			$scope.updateStatus('pausing...');
-			var vlcPlayer = document.getElementById('vlc-player');
-			if (vlcPlayer) {
-				$scope.vlcPause();
-			} else {
+			if ($scope.playerType === ME) {
 				$scope.mePause();
+			} else if ($scope.playerType === VJS) {
+				$scope.vjsPause();
+			} else {
+				var vlcPlayer = document.getElementById('vlc-player');
+				if (vlcPlayer) {
+					$scope.vlcPause();
+				}
 			}
 		};
 
 		$scope.stopPlay = function() {
 			$scope.updateStatus('stopping...');
-			var vlcPlayer = document.getElementById('vlc-player');
-			if (vlcPlayer) {
-				$scope.vlcStop();
-			} else {
+			if ($scope.playerType === ME) {
 				$scope.meStop();
+			} else if ($scope.playerType === VJS) {
+				$scope.vjsStop();
+			} else {
+				var vlcPlayer = document.getElementById('vlc-player');
+				if (vlcPlayer) {
+					$scope.vlcStop();
+				} 
 			}
 		};
 		
@@ -157,6 +232,12 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 					$scope.updateStatus('error');
 				}
 			});
+		};
+		
+		$scope.initVjsPlayerAndPlay = function() {
+			// TODO 
+			console.debug('initVjsPlayerAndPlay'); 
+			$scope.vjsPlayer = videojs('vjs-player');
 		};
 
 		$scope.$on('playit', function(event, args){

@@ -1,0 +1,1 @@
+videojs.options.silverlight.xap = "/lib/videojs/dist/video-js.swf";
