@@ -1,5 +1,5 @@
 'use strict';
-/*global MediaElement, $*/
+/*global MediaElement, videojs, $*/
 
 angular.module('player').controller('PlayerController', ['$scope', '$timeout', '$sce', 'Authentication', 'Menus',
 	function($scope, $timeout, $sce, Authentication, Menus) {
@@ -15,6 +15,7 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 
 		$scope.mePlayer = null;
 		$scope.meReady = true;
+		$scope.vjsMediaType = $scope.mediaType;
 		$scope.vjsPlayer = null;
 		$scope.vjsReady = true;
 		$scope.vlcPlayer = null;
@@ -239,6 +240,14 @@ angular.module('player').controller('PlayerController', ['$scope', '$timeout', '
 			console.debug('initVjsPlayerAndPlay'); 
 			$scope.vjsPlayer = videojs('vjs-player');
 		};
+
+		$scope.$watch('mediaType', function(newValue, oldValue) {
+			if ($scope.mediaType === 'video/rtmp') {
+				$scope.vjsMediaType = 'rtmp/mp4';
+			} else {
+			  $scope.vjsMediaType = $scope.mediaType;
+			}
+		});
 
 		$scope.$on('playit', function(event, args){
 			$scope.mediaUrl = args.content;
